@@ -1,22 +1,16 @@
 def call() {
 pipeline {
-    agent any
-      parameters {
-        choice(name: 'CHOICE', choices: ['REL_INT_1.0'], description: 'CHOICE')
-        string(name: 'MAVEN_GOAL', defaultValue: 'package', description: 'mvn goal') 
-        
-      }
-        
+    agent any  
     stages {
         stage('vcs') {
             steps {
-                git branch: "${params.CHOICE}", url: 'https://github.com/satishnamgadda/spring-framework-petclinic.git'
+                git branch: "$REL_INT_1.0", url: 'https://github.com/satishnamgadda/spring-framework-petclinic.git'
             }
 
         }
         stage('build') {
             steps {
-                sh "/usr/share/maven/bin/mvn ${params.MAVEN_GOAL}"
+                sh "/usr/share/maven/bin/mvn package"
             }
         }
         stage('artifacts') {
