@@ -12,7 +12,7 @@ pipeline {
                 rtMavenDeployer (
                    id : "MVN_DEFAULT",
                    releaseRepo : "spc-libs-release-local",
-                   snapshotRepo : "spc-libs-snapshot-local"
+                   snapshotRepo : "spc-libs-snapshot-local",
                    serverId : "JFROG-SPC"
                 )
 
