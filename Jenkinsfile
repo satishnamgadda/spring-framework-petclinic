@@ -1,31 +1,39 @@
 pipeline {
-    agent  { label 'JDK11' }
-      parameters {
-        choice(name: 'CHOICE', choices: ['REL_INT_1.0'], description: 'CHOICE')
-        string(name: 'MAVEN_GOAL', defaultValue: 'package', description: 'mvn goal') 
-        
-      }
-        
+    agent  { label 'JDK11' }   
     stages {
         stage('vcs') {
             steps {
-                git branch: "${params.CHOICE}", url: 'https://github.com/satishnamgadda/spring-framework-petclinic.git'
+                git branch: "REL_INT_1.0", url: 'https://github.com/satishnamgadda/spring-framework-petclinic.git'
             }
 
         }
-        stage('build') {
+        stage('artifactory configuaration') {
             steps {
-                sh "/usr/share/maven/bin/mvn ${params.MAVEN_GOAL}"
+                rtMavenDeployer (
+                   id : "MVN_DEFAULT",
+                   releaseRepo : "spc-libs-release-local",
+                   snapshotRepo : "spc-libs-snapshot-local"
+                   serverId : "JFROG-SPC"
+                )
+
             }
         }
-        stage('artifacts') {
+        stage('Exec Maven') {
             steps {
-            archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
+                rtMavenRun(
+                    pom : "pom.xml",
+                    goals : "package",
+                    tool : "mvn",
+                    deployerId : "MVN_DEFAULT"
+                )
+          
             }
         }
-        stage('archive results') {
+        stage('publish build info') {
             steps {
-                junit '**/surefire-reports/*.xml'
+               rtPublishBuildInfo(
+                serverId : "JFROG-SPC"
+               )
             }
         }
     }
