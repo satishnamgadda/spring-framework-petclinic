@@ -9,6 +9,9 @@ pipeline {
     stages {
         stage('vcs') {
             steps {
+                mail subject: 'build started',
+                     body: 'build started',
+                     to: 'qtdevops@gmail.com'
                 git branch: "${params.CHOICE}", url: 'https://github.com/satishnamgadda/spring-framework-petclinic.git'
             }
 
