@@ -26,6 +26,7 @@ pipeline {
             archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
             }
         }
+    }
         post {
             always {
                 echo 'job completed'
@@ -45,4 +46,3 @@ pipeline {
      
     }
     
-}
