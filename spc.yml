@@ -13,7 +13,7 @@
         url: https://spc8.jfrog.io/artifactory/spc-libs-release-local/org/springframework/samples/spring-framework-petclinic/5.3.22/spring-framework-petclinic-5.3.22.war
         dest: /home/devops
         url_username: namgaddasatish@gmail.com
-        url_password: AKCp8nH4kN6e5h4GCDCuLepuBL36jCwweysoaGdhJxXdfYEWfybquygQrAb78ryLshFY53Z2k
+        url_password: AKCp8nH4kN6e5h4GCDCuLepuBL36jCwweysoaGdhJxXdfYEWfybquygQrAb78ryLshFY53Z2kGh1
     - name: Copy the service file
       ansible.builtin.copy:
         src: /home/ubuntu/remote_root/remote_root/workspace/spc/spring-petclinic.service
