@@ -16,7 +16,7 @@
         url_password: AKCp8nH4kN6e5h4GCDCuLepuBL36jCwweysoaGdhJxXdfYEWfybquygQrAb78ryLshFY53Z2k
     - name: Copy the service file
       ansible.builtin.copy:
-        src: /home/devops/root/workspace/ansible-playbook-spc/spring-petclinic.service
+        src: /home/ubuntu/remote_root/remote_root/workspace/spc/spring-petclinic.service
         dest: /etc/systemd/system/spring-petclinic.service
     - name: Restart spc service file
       ansible.builtin.systemd:
