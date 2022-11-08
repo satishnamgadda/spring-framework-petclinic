@@ -1,48 +1,55 @@
 pipeline {
-    agent  { label 'JDK11' }
-      parameters {
-        choice(name: 'CHOICE', choices: ['REL_INT_1.0'], description: 'CHOICE')
-        string(name: 'MAVEN_GOAL', defaultValue: 'package', description: 'mvn goal') 
-        
-      }
-        
+    agent any  
     stages {
         stage('vcs') {
-            steps {
-                mail subject: 'build started',
-                     body: 'build started',
-                     to: 'qtdevops@gmail.com'
-                git branch: "${params.CHOICE}", url: 'https://github.com/satishnamgadda/spring-framework-petclinic.git'
+            steps {    
+                git branch: "REL_INT_1.0", url: 'https://github.com/satishnamgadda/spring-framework-petclinic.git'
             }
 
         }
-        stage('build') {
+        stage('artifactory configuaration') {
             steps {
-                sh "/usr/share/maven/bin/mvn ${params.MAVEN_GOAL}"
+                rtMavenDeployer (
+                   id : "MVN_DEFAULT",
+                   releaseRepo : "spc-libs-release-local",
+                   snapshotRepo : "spc-libs-snapshot-local",
+                   serverId : "JFROG_SPC"
+                )
+
             }
         }
-        stage('artifacts') {
+        stage('Exec Maven') {
             steps {
-            archiveArtifacts artifacts: 'target/*.war', followSymlinks: false
+                rtMavenRun(
+                    pom : "pom.xml",
+                    goals : "clean install",
+                    tool : "mvn",
+                    deployerId : "MVN_DEFAULT"
+                )
+          
             }
         }
-    }
-        post {
-            always {
-                echo 'job completed'
-                 mail subject: 'build completed',
-                      body: 'build completed',
-                      to: 'qtdevops@gmail.com'
-            }
-            failure {
-                 mail subject: 'build failed',
-                      body: 'build failed',
-                      to: 'qtdevops@gmail.com'
-            }
-            success {
-                 junit '**/surefire-reports/*.xml'
+        stage('publish build info') {
+            steps {
+               rtPublishBuildInfo(
+                serverId : "JFROG_SPC"
+               )
             }
         }
-     
     }
     
+}
+
+
+
+
+ //    stage('Build the Code') {
+ //           steps {
+ //              withSonarQubeEnv('SONAR') {
+ //                   sh script: 'mvn clean package sonar:sonar'
+ //              }
+ //           }
+ //       }
+ //     mail subject: 'build started',
+ //                    body: 'build started',
+ //                    to: 'qtdevops@gmail.com'
