@@ -12,10 +12,10 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: aws
     strategy:
       matrix:
-        java: [ '8', '11', '17' ]
+        java: [ '17' ]
 
     steps:
     - uses: actions/checkout@v2
