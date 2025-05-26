@@ -18,7 +18,7 @@ jobs:
     - name: Run SonarQube analysis with Maven
       run: |
         mvn clean verify sonar:sonar 
-         -Dsonar.projectKey=spring-framework-petclinic 
+         -Dsonar.projectKey="spring-framework-petclinic" 
          -Dsonar.host.url=${{ secrets.HOST_URL }} 
          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
     env:
