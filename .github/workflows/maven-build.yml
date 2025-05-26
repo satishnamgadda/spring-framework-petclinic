@@ -21,6 +21,9 @@ jobs:
       uses: SonarSource/sonarqube-scan-action@v2
       with:
         projectBaseDir: .
-        args: "-Dsonar.projectKey=spring-framework-petclinic -Dsonar.host.url=${{ secrets.HOST_URL }}"
+        args: >
+          -Dsonar.projectKey=spring-framework-petclinic 
+          -Dsonar.host.url=${{ secrets.HOST_URL }}
+          -Dsonar.java.binaries=target/classes
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
